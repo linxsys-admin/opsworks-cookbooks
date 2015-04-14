@@ -9,7 +9,7 @@ define :opsworks_deploy_dir do
   end
 
   # create shared/ directory structure
-  ['uploads','log','config','system','pids','scripts','sockets'].each do |dir_name|
+  ['log','config','system','pids','scripts','sockets'].each do |dir_name|
     directory "#{params[:path]}/shared/#{dir_name}" do
       group params[:group]
       owner params[:user]
@@ -17,6 +17,15 @@ define :opsworks_deploy_dir do
       action :create
       recursive true
     end
+  end
+
+  # shared uploads directory
+  direcotry "#{params[:path]}/shared/uploads" do
+    group params[:group]
+    owner "www-data"
+    mode 0770
+    action :create
+    recursive true
   end
 
 end
