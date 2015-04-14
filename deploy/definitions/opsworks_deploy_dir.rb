@@ -3,7 +3,7 @@ define :opsworks_deploy_dir do
   directory "#{params[:path]}/shared" do
     group params[:group]
     owner params[:user]
-    mode 0770
+    mode 0775
     action :create
     recursive true
   end
@@ -23,7 +23,7 @@ define :opsworks_deploy_dir do
   direcotry "#{params[:path]}/shared/uploads" do
     group params[:group]
     owner "www-data"
-    mode 0770
+    mode 0775
     action :create
     recursive true
   end
