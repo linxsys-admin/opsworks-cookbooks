@@ -20,7 +20,7 @@ define :opsworks_deploy_dir do
   end
 
   # shared uploads directory
-  direcotry "#{params[:path]}/shared/uploads" do
+  directory "#{params[:path]}/shared/uploads" do
     group params[:group]
     owner "www-data"
     mode 0775
