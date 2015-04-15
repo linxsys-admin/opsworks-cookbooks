@@ -155,6 +155,17 @@ define :opsworks_deploy do
         # run user provided callback file
         run_callback_from_file("#{release_path}/deploy/before_migrate.rb")
       end
+
+      before_restart do
+        # fix permissions for shared uploads directory
+        directory "#{node[:deploy][application][:deploy_to]}/shared/uploads" do
+          group node[:apache][:group]
+          owner node[:apache][:user]
+          mode 0775
+          action :create
+          recursive true
+        end
+      end
     end
   end
 
