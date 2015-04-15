@@ -21,8 +21,8 @@ define :opsworks_deploy_dir do
 
   # shared uploads directory
   directory "#{params[:path]}/shared/uploads" do
-    group params[:group]
-    owner "www-data"
+    group node[:apache][:group]
+    owner node[:apache][:user]
     mode 0775
     action :create
     recursive true
