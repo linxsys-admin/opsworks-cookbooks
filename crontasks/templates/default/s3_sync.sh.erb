@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# sync with s3 bucket
-s3cmd sync --skip-existing /srv/www/wp_default/shared/uploads/ s3://<%= @bucket_name %>/wp-content/uploads/
-s3cmd sync --skip-existing s3://<%= @bucket_name %>/wp-content/uploads/ /srv/www/wp_default/shared/uploads/
-
-# fix permissions
-chown -R www-data:www-data /srv/www/wp_default/current/wp-content/*
-chown -R www-data:www-data /srv/www/wp_default/shared/uploads
