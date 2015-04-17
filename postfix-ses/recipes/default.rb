@@ -22,7 +22,7 @@ end
 
 template "/etc/postfix/sasl_passwd" do
   source "sasl_passwd.erb"
-  mode 0644
+  mode 0600
   owner "root"
   group "root"
   variables(
@@ -33,12 +33,12 @@ template "/etc/postfix/sasl_passwd" do
   action :create
 end
 
-script "create_a_hashmap_database" do
+script "create_a_hashmap_database_file" do
   interpreter "bash"
   user "root"
   code <<-EOH
     postmap hash:/etc/postfix/sasl_passwd
-    rm -f /etc/postfix/sasl_passwd
+    chmod 0600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
   EOH
 end
 
