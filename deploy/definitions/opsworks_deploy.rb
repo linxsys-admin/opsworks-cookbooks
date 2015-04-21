@@ -161,15 +161,21 @@ define :opsworks_deploy do
         directory "#{node[:deploy][application][:deploy_to]}/shared/uploads" do
           group node[:apache][:group]
           owner node[:apache][:user]
+          recursive true
           mode 0775
           action :create
-          recursive true
         end
 
         script "chown-wp-content" do
           interpreter "bash"
           user "root"
           code "chown -R #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:deploy][application][:deploy_to]}/current/wp-content"
+        end
+
+        script "chown-uploads" do
+          interpreter "bash"
+          user "root"
+          code "chown -R #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:deploy][application][:deploy_to]}/shared/uploads"
         end
       end
     end
