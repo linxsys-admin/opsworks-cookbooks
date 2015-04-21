@@ -42,6 +42,24 @@ script "create_a_hashmap_database_file" do
   EOH
 end
 
+template "/etc/postfix/generic" do
+  source "generic.erb"
+  mode 0644
+  owner "root"
+  group "root"
+  variables(
+    :www_user => node[:postfix_ses][:www_user] ? node[:postfix_ses][:www_user] : node[:apache][:user],
+    :rewrites_ender => node[:postfix_ses][:rewrite_sender]
+  )
+  action :create
+end
+
+script "create_a_hashmap_generic_file" do
+  interpreter "bash"
+  user "root"
+  code "postmap /etc/postfix/generic"
+end
+
 service "postfix" do
   action [ :enable, :restart ]
 end
