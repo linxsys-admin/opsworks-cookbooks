@@ -40,7 +40,7 @@ template "/etc/postfix/generic" do
   group "root"
   variables(
     :www_user => node[:postfix_ses][:www_user],
-    :rewrite_ender => node[:postfix_ses][:rewrite_sender]
+    :rewrite_sender => node[:postfix_ses][:rewrite_sender]
   )
   action :create
 end
