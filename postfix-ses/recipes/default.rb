@@ -48,7 +48,7 @@ template "/etc/postfix/generic" do
   owner "root"
   group "root"
   variables(
-    :www_user => node[:apache][:user] ? node[:apache][:user] : node[:postfix_ses][:www_user],
+    :www_user => node[:postfix_ses][:www_user],
     :rewrites_ender => node[:postfix_ses][:rewrite_sender]
   )
   action :create

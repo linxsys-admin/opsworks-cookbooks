@@ -1,5 +1,5 @@
 default[:postfix_ses][:relayhost] = 'email-smtp.eu-west-1.amazonaws.com'
 default[:postfix_ses][:username] = ''
 default[:postfix_ses][:password] = ''
-default[:postfix_ses][:www_user] = 'www-data'
+default[:postfix_ses][:www_user] = node[:apache][:user] ? node[:apache][:user] : 'www-data'
 default[:postfix_ses][:rewrite_sender] = ''
