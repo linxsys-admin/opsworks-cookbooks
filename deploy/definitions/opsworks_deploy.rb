@@ -166,13 +166,13 @@ define :opsworks_deploy do
           action :create
         end
 
-        script "chown-wp-content" do
+        script "chown_wp-content_to_#{node[:apache][:user]}:#{node[:apache][:group]}" do
           interpreter "bash"
           user "root"
           code "chown -R #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:deploy][application][:deploy_to]}/current/wp-content"
         end
 
-        script "chown-uploads" do
+        script "chown_uploads_to_#{node[:apache][:user]}:#{node[:apache][:group]}" do
           interpreter "bash"
           user "root"
           code "chown -R #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:deploy][application][:deploy_to]}/shared/uploads"
