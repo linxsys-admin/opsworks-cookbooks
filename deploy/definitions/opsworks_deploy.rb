@@ -165,6 +165,12 @@ define :opsworks_deploy do
           action :create
           recursive true
         end
+
+        script "chown-wp-content" do
+          interpreter "bash"
+          user "root"
+          code "chown -R #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:deploy][application][:deploy_to]}/current/wp-content"
+        end
       end
     end
   end
