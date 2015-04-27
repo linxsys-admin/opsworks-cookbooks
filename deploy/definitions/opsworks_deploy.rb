@@ -177,6 +177,15 @@ define :opsworks_deploy do
           user "root"
           code "chown -R #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:deploy][application][:deploy_to]}/shared/uploads"
         end
+
+        script "setup_proxy_for_blog" do
+          interpreter "bash"
+          user "root"
+          code <<-EOH
+            /usr/sbin/a2enmod proxy_http
+            sed -i \"s$</VirtualHost>$\\n  ProxyPass /blog http://#{node[:deploy][application][:blogproxy]}\\n  ProxyPassReverse /blog http://#{node[:deploy][application][:blogproxy]}\\n</VirtualHost>$\" /etc/apache2/sites-enabled/#{application}.conf
+          EOH
+        end
       end
     end
   end
