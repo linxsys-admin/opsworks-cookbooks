@@ -183,7 +183,7 @@ define :opsworks_deploy do
           user "root"
           code <<-EOH
             /usr/sbin/a2enmod proxy_http
-            sed -i \"s$</VirtualHost>$\\n  ProxyPass /blog http://#{node[:deploy][application][:blogproxy]}\\n  ProxyPassReverse /blog http://#{node[:deploy][application][:blogproxy]}\\n</VirtualHost>$\" /etc/apache2/sites-enabled/#{application}.conf
+            sed -i \"s$</VirtualHost>$\\n  ProxyPass /blog http://#{node[:deploy][application][:blogproxy]}\\n  ProxyPassReverse /blog http://#{node[:deploy][application][:blogproxy]}\\n</VirtualHost>$\" /etc/apache2/sites-available/#{application}.conf
           EOH
         end
       end
