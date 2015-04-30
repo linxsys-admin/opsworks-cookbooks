@@ -27,5 +27,29 @@ define :opsworks_deploy_dir do
     action :create
     recursive true
   end
+  
+  201{1..5}/{01..12}
+  
+  5.times do |i|
+    main_dir = 2011 + i
+    directory "#{params[:path]}/shared/uploads/#{main_dir}" do
+      group node[:apache][:group]
+      owner node[:apache][:user]
+      mode 0775
+      action :create
+      recursive true
+    end
+
+    12.times do |j|
+      sub_dir = "%02d" % (j + 1)
+      directory "#{params[:path]}/shared/uploads/#{main_dir}/#{sub_dir}" do
+        group node[:apache][:group]
+        owner node[:apache][:user]
+        mode 0775
+        action :create
+        recursive true
+      end
+    end
+  end
 
 end
