@@ -27,9 +27,7 @@ define :opsworks_deploy_dir do
     action :create
     recursive true
   end
-  
-  201{1..5}/{01..12}
-  
+
   5.times do |i|
     main_dir = 2011 + i
     directory "#{params[:path]}/shared/uploads/#{main_dir}" do
