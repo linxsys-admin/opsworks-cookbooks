@@ -3,6 +3,6 @@
 # recipe:: default
 #
 
-package "redis-cli" do
+package "redis-tools" do
   action :install
 end
