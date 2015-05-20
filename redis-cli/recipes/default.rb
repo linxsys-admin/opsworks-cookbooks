@@ -1,5 +1,5 @@
 #
-# cookbook:: s3-bucket
+# cookbook:: redis-cli
 # recipe:: default
 #
 
