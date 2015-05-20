@@ -1,5 +1,5 @@
 #
-# cookbook:: redis-cli
+# cookbook::  redis-cli
 # recipe:: default
 #
 
