@@ -21,8 +21,6 @@
 # limitations under the License.
 #
 
-include_recipe 'cron'
-
 install_path="#{node[:cw_mon][:home_dir]}/aws-scripts-mon-v#{node[:cw_mon][:version]}"
 zip_filepath="#{node[:cw_mon][:home_dir]}/CloudWatchMonitoringScripts-v#{node[:cw_mon][:version]}.zip"
 
@@ -55,19 +53,22 @@ end
 
 group node[:cw_mon][:group] do
   action :create
+  not_if "getent group #{node[:cw_mon][:group]}"
 end
 
 user node[:cw_mon][:user] do
   home node[:cw_mon][:home_dir]
   group node[:cw_mon][:group]
   action :create
+  not_if "getent passwd #{node[:cw_mon][:group]}"
 end
 
-directory node[:cw_mon][:home_dir] do
-  group node[:cw_mon][:group]
-  owner node[:cw_mon][:user]
+unless Dir.exist? "#{node[:cw_mon][:home_dir]}"
+  directory node[:cw_mon][:home_dir] do
+    group node[:cw_mon][:group]
+    owner node[:cw_mon][:user]
+  end
 end
-
 
 remote_file zip_filepath do
   source node[:cw_mon][:release_url]
@@ -126,7 +127,7 @@ else
   options << "--aws-credential-file #{install_path}/awscreds.conf"
 end
 
-cron_d 'cloudwatch_monitoring' do
+cron 'cloudwatch_monitoring' do
   minute "*/#{node[:cw_mon][:cron_minutes]}"
   user node[:cw_mon][:user]
   command %Q{#{install_path}/mon-put-instance-data.pl #{(options).join(' ')} || logger -t aws-scripts-mon "status=failed exit_code=$?"}
