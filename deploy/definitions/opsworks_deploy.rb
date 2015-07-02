@@ -186,6 +186,16 @@ define :opsworks_deploy do
             sed -i \"s$</VirtualHost>$\\n  ProxyPass /blog http://#{node[:deploy][application][:blogproxy]}\\n  ProxyPassReverse /blog http://#{node[:deploy][application][:blogproxy]}\\n</VirtualHost>$\" /etc/apache2/sites-available/#{application}.conf
           EOH
         end
+
+	if File.exist? "/etc/apache2/htpasswd"
+	  script "enable_basic_auth" do
+	    interpreter "bash"
+	    user "root"
+	    code <<-EOH
+	      sed -i \"s$</VirtualHost>$\\n  <Location />\\n    AuthType basic\\n    AuthName "GGF-dev"\\n    AuthBasicProvider file\\n    AuthUserFile /etc/apache2/htpasswd\\n    Require valid-user\\n  </Location>\\n</VirtualHost>$\" /etc/apache2/sites-available/#{application}.conf
+	    EOH
+	  end
+	end
       end
     end
   end

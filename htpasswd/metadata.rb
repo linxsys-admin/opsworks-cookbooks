@@ -11,4 +11,4 @@ suggests 'python'
   supports os
 end
 
-depends 'python'
+#depends 'python'
