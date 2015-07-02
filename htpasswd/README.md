@@ -1,4 +1,4 @@
-# htpasswd [![Build Status](https://travis-ci.org/Youscribe/htpasswd-cookbook.png)](https://travis-ci.org/Youscribe/htpasswd-cookbook) [![Cookbook Version](https://img.shields.io/cookbook/v/htpasswd.svg)](https://community.opscode.com/cookbooks/htpasswd)
+# htpasswd
 
 Modified Version of the [htpasswd](https://supermarket.chef.io/cookbooks/htpasswd) provider
 
