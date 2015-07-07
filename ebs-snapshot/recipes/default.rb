@@ -30,7 +30,7 @@ cookbook_file '/opt/ebs-snapshot/ebs-snapshot.sh' do
 end
 
 cron_env = { "PATH" => "/usr/local/bin:$PATH", "AWS_CONFIG_FILE" => "/root/.aws/config" }
-cront 'setup_ebs-snapshot_cron_task' do
+cron 'setup_ebs-snapshot_cron_task' do
   environment cron_env
   minute '55'
   hour '23'
