@@ -7,9 +7,10 @@ package 'python-pip' do
   action :install
 end
 
-execute 'install_awscli_tool' do
+script 'install_awscli_tool' do
   interpreter 'bash'
-  command '/usr/bin/pip install awscli'
+  user 'root'
+  code '/usr/bin/pip install awscli'
 end
 
 directory '/opt/ebs-snapshot' do
