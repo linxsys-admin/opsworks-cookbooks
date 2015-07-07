@@ -46,14 +46,14 @@ directory '/root/.aws' do
   recursive true
 end
 
-template 'create_config_file_for_awscli' do
+template '/root/.aws/config' do
   source 'aws_config.erb'
   owner 'root'
   group 'root'
   mode '0600'
 end
 
-template 'create_credentials_file_for_awscli' do
+template '/root/.aws/credentials' do
   source 'aws_credentials.erb'
   owner 'root'
   group 'root'
