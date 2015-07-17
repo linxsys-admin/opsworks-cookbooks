@@ -18,8 +18,8 @@ cron "update_reminder - once per day" do
   command "wget -q -O - http://gogetfunding.com/cron-functions/?func=update_reminder >dev/null 2>&1"
 end
 
-cron "redis_cron_view_count_updator - once every minute" do
-  minute "*/1"
+cron "redis_cron_view_count_updator - once every 5 minutes" do
+  minute "*/5"
   user "root"
   command "wget -q -O - http://gogetfunding.com/wp-content/themes/ggf/redis_cron_view_count_updator.php >/dev/null 2>&1"
 end
