@@ -1,0 +1,119 @@
+# This is a basic VCL configuration file for varnish.  See the vcl(7)
+# man page for details on VCL syntax and semantics.
+#
+# Default backend definition.  Set this to point to your content
+# server.
+#
+
+# define backend
+backend default {
+        .host = "<%= node['varnish']['backend_host'] %>";
+        .port = "<%= node['varnish']['backend_port'] %>";
+}
+
+# beggining of varnish request
+sub vcl_recv {
+      unset req.http.Accept-Encoding;
+
+  #if (req.request == "POST") {
+    # We only deal with GET and HEAD by default
+  #  return (pipe);
+  #}
+  if (req.url ~ "^/$") {
+    if (req.http.cookie ~ "wordpress_logged") {
+        set req.http.v-logged-in = "true";
+    }
+    else {
+        set req.http.v-logged-in = "false";
+    }
+    return (lookup);
+  }
+
+
+  # what files to cache (lookup) - just add if needed
+  if (req.url ~ "(?i)\.(jpeg|jpg|png|gif|ico|webp|js|css|txt|pdf|gz|zip|lzma|bz2|tgz|tbz|html|htm)$") {
+      return(lookup);
+  }
+
+  if (req.url ~ "^/status\.php$" ||
+    req.url ~ "^/update\.php$"   ||
+    req.url ~ "^/wp-login\.php$"   ||
+    req.url ~ "^/admin"          ||
+    req.url ~ "^/admin/.*$"      ||
+    req.url ~ "^/wp-admin"       ||
+    req.url ~ "^/wp-admin/.*$"    ||
+    req.url ~ "^/user"           ||
+    req.url ~ "^/user/.*$"       ||
+    req.url ~ "^/comment/reply/.*$"     ||
+    req.url ~ "^/wp-login/.*$"      ||
+    req.url ~ "^/login"          ||
+    req.url ~ "^/node/.*/edit$"  ||
+    req.url ~ "^/node/.*/edit"   ||
+    req.url ~ "^/node/add/.*$"   ||
+    req.url ~ "^/info/.*$"       ||
+    req.url ~ "^/flag/.*$"       ||
+    req.url ~ "^.*/ajax/.*$"     ||
+    req.url ~ "^.*/ahah/.*$") {
+     return (pass);
+  }
+}
+
+sub vcl_pass {
+    # Added by tmagnien
+    # Mark objects that should not be cached
+    set req.http.v-handling = "pass";
+}
+
+# after retrieval from webserver
+sub vcl_fetch {
+    # what files to handle (the cached ones)  - just add if needed
+  if (req.url ~ "(?i)\.(jpeg|jpg|png|gif|ico|webp|js|css|txt|pdf|gz|zip|lzma|bz2|tgz|tbz|html|htm)$") {
+        # unset cookies in fetch
+        unset beresp.http.Set-Cookie;
+        # save cache for 6 hour
+        set beresp.ttl = 6h;
+	# compress
+	set beresp.do_gzip = true;
+  }
+  if (req.url ~ "^/$") {
+        # unset cookies in fetch
+        unset beresp.http.Set-Cookie;
+        # save cache for 6 hour
+        set beresp.ttl = 6h;
+        # compress
+        set beresp.do_gzip = true;
+        unset beresp.http.expires;
+        set beresp.http.cache-control = "max-age=0";
+  }
+}
+
+# how to deliver the output (manipulate output)
+sub vcl_deliver {
+    # if a varnish object hits, send X-cache header with HIT
+    if (obj.hits > 0) {
+        set resp.http.X-Cache = "HIT";
+    # otherwise, send X-cache header with MISS
+    } else {
+        set resp.http.X-Cache = "MISS";
+    }
+    # Added by tmagnien
+    # If object is non cacheable, remove expires and max-age
+    # so that the client browser does not cache it.
+    if (req.http.v-handling) {
+        unset resp.http.v-handling;
+        unset resp.http.expires;
+        set resp.http.cache-control = "max-age=0";
+    }
+}
+
+sub vcl_error {
+   # handle errors - could eg. be redirect on a specific status code
+}
+
+sub vcl_hash {
+   #
+  if (req.http.v-logged-in) {
+    hash_data(req.http.v-logged-in);
+  }
+
+}
