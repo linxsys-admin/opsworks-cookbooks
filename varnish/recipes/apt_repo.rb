@@ -22,3 +22,5 @@ apt_repository "varnish-cache" do
   key "http://repo.varnish-cache.org/#{node['platform']}/GPG-key.txt"
   action :add
 end
+
+include_recipe 'apt::default'
