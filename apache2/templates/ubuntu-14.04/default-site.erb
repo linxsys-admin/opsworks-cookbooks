@@ -34,12 +34,14 @@
     Allow from 127.0.0.0/255.0.0.0 ::1/128
   </Location>
 
-  ErrorLog <%= node[:apache][:log_dir] %>/error.log
+  #ErrorLog <%= node[:apache][:log_dir] %>/error.log
+  ErrorLog "|/usr/bin/logger -t default-http-error -p local6.notice"
 
   # Possible values include: debug, info, notice, warn, error, crit,
   # alert, emerg.
   LogLevel <%= node[:apache][:log_level] %>
 
-  CustomLog <%= node[:apache][:log_dir] %>/access.log combined
+  #CustomLog <%= node[:apache][:log_dir] %>/access.log combined
+  CustomLog "|/usr/bin/logger -t default-http-access -p local6.notice" combined
 
 </VirtualHost>
