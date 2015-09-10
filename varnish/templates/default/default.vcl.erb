@@ -85,6 +85,9 @@ sub vcl_fetch {
         unset beresp.http.expires;
         set beresp.http.cache-control = "max-age=0";
   }
+  if (beresp.status == 404) {
+        set beresp.ttl = 5s;
+  }
 }
 
 # how to deliver the output (manipulate output)
