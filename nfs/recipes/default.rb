@@ -8,5 +8,6 @@ mount node[:nfs][:mount_point] do
     action [:mount, :enable]
     device node[:nfs][:resource]
     fstype node[:nfs][:fstype]
+    options node[:nfs][:options]
     pass 0
 end
