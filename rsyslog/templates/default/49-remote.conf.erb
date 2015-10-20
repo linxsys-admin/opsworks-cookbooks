@@ -26,3 +26,4 @@ $ActionSendStreamDriverAuthMode <%= node['rsyslog']['tls_auth_mode'] %>
 <%= node['rsyslog']['logs_to_forward'] %> @<%= server %>:<%= node['rsyslog']['port'] %><%= node["rsyslog"]["default_remote_template"] ? ';' + node["rsyslog"]["default_remote_template"] : nil %>
 <%   end -%>
 <% end -%>
+& stop
