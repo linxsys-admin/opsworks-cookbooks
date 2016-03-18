@@ -29,6 +29,10 @@ sub vcl_recv {
     return (lookup);
   }
 
+  # disable cache for blog, which goes through nginx proxy to cPanel instance
+  if (req.url ~ "^/blog/.*$") {
+    return (pass);
+  }
 
   # what files to cache (lookup) - just add if needed
   if (req.url ~ "(?i)\.(jpeg|jpg|png|gif|ico|webp|js|css|txt|pdf|gz|zip|lzma|bz2|tgz|tbz|html|htm)$") {
