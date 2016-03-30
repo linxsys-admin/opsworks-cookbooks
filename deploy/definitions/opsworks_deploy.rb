@@ -177,6 +177,14 @@ define :opsworks_deploy do
           user "root"
           code "chown -R #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:deploy][application][:deploy_to]}/shared/uploads"
         end
+        
+        script "disable_apache_keepalive" do
+          interpreter "bash"
+          user "root"
+          code <<-EOH
+            sed -i \"s$KeepAlive On$KeepAlive Off$g\" /etc/apache2/apache2.conf
+          EOH
+        end
 
         script "setup_proxy_for_blog" do
           interpreter "bash"
