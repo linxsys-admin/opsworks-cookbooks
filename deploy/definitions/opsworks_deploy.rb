@@ -182,7 +182,7 @@ define :opsworks_deploy do
           interpreter "bash"
           user "root"
           code <<-EOH
-            sed -i \"s$KeepAlive On$KeepAlive Off$g\" /etc/apache2/apache2.conf
+            sed -i \"s@KeepAlive On@KeepAlive Off@g\" /etc/apache2/apache2.conf
           EOH
         end
 
@@ -191,7 +191,7 @@ define :opsworks_deploy do
           user "root"
           code <<-EOH
             /usr/sbin/a2enmod proxy_http
-            sed -i \"s$</VirtualHost>$\\n  ProxyPass /blog http://#{node[:deploy][application][:blogproxy]}\\n  ProxyPassReverse /blog http://#{node[:deploy][application][:blogproxy]}\\n</VirtualHost>$\" /etc/apache2/sites-available/#{application}.conf
+            sed -i \"s@</VirtualHost>@\\n  ProxyPass /blog http://#{node[:deploy][application][:blogproxy]}\\n  ProxyPassReverse /blog http://#{node[:deploy][application][:blogproxy]}\\n</VirtualHost>@\" /etc/apache2/sites-available/#{application}.conf
           EOH
         end
 
@@ -200,7 +200,7 @@ define :opsworks_deploy do
 	    interpreter "bash"
 	    user "root"
 	    code <<-EOH
-	      sed -i \"s$</VirtualHost>$\\n  <Location />\\n    AuthType basic\\n    AuthName "GGF-dev"\\n    AuthBasicProvider file\\n    AuthUserFile /etc/apache2/htpasswd\\n    Require valid-user\\n  </Location>\\n</VirtualHost>$\" /etc/apache2/sites-available/#{application}.conf
+	      sed -i \"s@</VirtualHost>@\\n  <Location />\\n    AuthType basic\\n    AuthName "GGF-dev"\\n    AuthBasicProvider file\\n    AuthUserFile /etc/apache2/htpasswd\\n    Require valid-user\\n  </Location>\\n</VirtualHost>@\" /etc/apache2/sites-available/#{application}.conf
 	    EOH
 	  end
 	end
