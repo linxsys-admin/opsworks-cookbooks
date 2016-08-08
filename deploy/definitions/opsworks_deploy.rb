@@ -182,7 +182,7 @@ define :opsworks_deploy do
           interpreter "bash"
           user "root"
           code <<-EOH
-            sed -i \"s@KeepAlive On@KeepAlive Off@g\" /etc/apache2/apache2.conf
+            sed -i \"s@KeepAlive On@KeepAlive Off@\" /etc/apache2/apache2.conf
           EOH
         end
 
